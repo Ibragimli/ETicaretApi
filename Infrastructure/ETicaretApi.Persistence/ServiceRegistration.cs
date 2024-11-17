@@ -24,13 +24,13 @@ namespace ETicaretApi.Persistence
         public static void AddPersistenceServices(this IServiceCollection services)
         {
 
-            services.AddSingleton<IProductService, ProductService>();
-            //services.AddSingleton<ICustomerWriteRepository, CustomerWriteRepository>();
-            //services.AddSingleton<ICustomerReadRepository, CustomerReadRepository>();
-            //services.AddSingleton<IProductWriteRepository, ProductWriteRepository>();
-            //services.AddSingleton<IProductReadRepository, ProductReadRepository>();
-            //services.AddSingleton<IOrderWriteRepository, OrderWriteRepository>();
-            //services.AddSingleton<IOrderReadRepository, OrderReadRepository>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ICustomerWriteRepository, CustomerWriteRepository>();
+            services.AddScoped<ICustomerReadRepository, CustomerReadRepository>();
+            services.AddScoped<IProductWriteRepository, ProductWriteRepository>();
+            services.AddScoped<IProductReadRepository, ProductReadRepository>();
+            services.AddScoped<IOrderWriteRepository, OrderWriteRepository>();
+            services.AddScoped<IOrderReadRepository, OrderReadRepository>();
 
         }
     }

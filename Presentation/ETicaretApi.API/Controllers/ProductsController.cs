@@ -1,5 +1,6 @@
 ﻿using ETicaretApi.Application.Abstractions;
 using ETicaretApi.Application.Repositories.Product;
+using ETicaretApi.Domain.Entities;
 using ETicaretApi.Persistence.Repositories.Product;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,16 +21,26 @@ namespace ETicaretApi.API.Controllers
             _productReadRepository = productReadRepository;
         }
 
-        //[HttpGet]
-        //public async void Get()
-        //{
-        //    await _productWriteRepository.AddRangeAsync(new()
-        //    {
-        //        new() {Id = 1, CreatedTime = DateTime.UtcNow,Name="Test-1",Price=2,Stock = 20},
-        //        new() {Id = 2, CreatedTime = DateTime.UtcNow,Name="Test-3",Price=4,Stock = 20},
-        //        new() {Id = 3, CreatedTime = DateTime.UtcNow,Name="Test-2",Price=5,Stock = 20},
-        //    });
-        //    var count = await _productWriteRepository.SaveAsync();
-        //}
+        [HttpGet]
+        public async Task Get()
+        {
+            //await _productWriteRepository.AddRangeAsync(new()
+            //{
+            //    new() { CreatedTime = DateTime.UtcNow,Name="Test-1",Price=2,Stock = 40},
+            //    new() {CreatedTime = DateTime.UtcNow,Name="Test-3",Price=4,Stock = 50},
+            //    new() {CreatedTime = DateTime.UtcNow,Name="Test-2",Price=5,Stock = 30},
+            //});
+            //var count = await _productWriteRepository.SaveAsync();
+
+
+
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            Product product = await _productReadRepository.GetByIdAsync(id);
+            return Ok(product);
+        }
     }
 }
