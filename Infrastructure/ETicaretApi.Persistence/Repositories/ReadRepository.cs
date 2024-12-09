@@ -29,6 +29,14 @@ namespace ETicaretApi.Persistence.Repositories
             return query;
         }
 
+        public async Task<bool> IsExistAsync(int id, bool tracking = true)
+        {
+            var query = Table.AsQueryable();
+            if (!tracking)
+                query = query.AsNoTracking();
+            return await query.AnyAsync(data => data.Id == id);
+           
+        }
         public async Task<T> GetByIdAsync(int id, bool tracking = true)
         {
             var query = Table.AsQueryable();

@@ -21,7 +21,12 @@ namespace ETicaretApi.Persistence.Repositories
 
         public DbSet<T> Table => _context.Set<T>();
 
-        public async Task<bool> AddAsync(T model)
+        public async Task<T> AddAsync(T model)
+        {
+            EntityEntry<T> T = await Table.AddAsync(model);
+            return T.Entity;
+        }
+        public async Task<bool> AddExistAsync(T model)
         {
             EntityEntry entityEntry = await Table.AddAsync(model);
             return entityEntry.State == EntityState.Added;
