@@ -1,21 +1,14 @@
 ﻿using ETicaretApi.Application.Abstractions;
 using ETicaretApi.Application.Abstractions.Storage;
 using ETicaretApi.Application.Features.Commands.Product.DeleteProduct;
+using ETicaretApi.Application.Features.Commands.Product.PostProduct;
 using ETicaretApi.Application.Features.Commands.Product.PutProduct;
 using ETicaretApi.Application.Repositories.Product;
 using ETicaretApi.Application.Repositories.ProductImage;
 using ETicaretApi.Application.Services;
-using ETicaretApi.Application.ViewModels.Products;
 using ETicaretApi.Domain.Entities;
-using ETicaretApi.Persistence.Repositories.Product;
-using ETicaretApi.Persistence.Repositories.ProductImage;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Abstractions;
-using Microsoft.AspNetCore.Routing.Constraints;
-using System.IO;
-using System.Net;
 
 namespace ETicaretApi.API.Controllers
 {
@@ -69,7 +62,7 @@ namespace ETicaretApi.API.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromForm] ProductCreateVM productVM)
+        public async Task<IActionResult> Post([FromForm] PostProductCommandRequest postProductCommandRequest)
         {
             if (!ModelState.IsValid)
             {
@@ -81,25 +74,30 @@ namespace ETicaretApi.API.Controllers
                     }
                 }
             }
-            var newProduct = await _productWriteRepository.AddAsync(new()
-            {
-                Name = productVM.Name,
-                Price = productVM.Price,
-                Stock = productVM.Stock,
-            });
-            await _productWriteRepository.SaveAsync();
+            var response = await _mediator.Send(postProductCommandRequest);
+            return Ok(response);
+            //var newProduct = await _productWriteRepository.AddAsync(new()
+            //{
+            //    Name = productVM.Name,
+            //    Price = productVM.Price,
+            //    Stock = productVM.Stock,
+            //});
+            //await _productWriteRepository.SaveAsync();
 
-            var paths = await _storageService.UploadAsync("files", Request.Form.Files);
+            //var paths = await _storageService.UploadAsync("files", Request.Form.Files);
 
-            var newProductImages = productVM.ImageFiles.Select((image, index) => new ProductImageFile
-            {
-                ProductId = newProduct.Id,
-                Image = image.Name,
-                Path = paths.ElementAtOrDefault(index).fileName
-            }).ToList();
+            //var newProductImages = productVM.ImageFiles.Select((image, index) => new ProductImageFile
+            //{
+            //    ProductId = newProduct.Id,
+            //    Image = image.Name,
+            //    Path = paths.ElementAtOrDefault(index).fileName
+            //}).ToList();
 
-            await _productImageFileWriteRepository.AddRangeAsync(newProductImages);
-            await _productImageFileWriteRepository.SaveAsync();
+            //await _productImageFileWriteRepository.AddRangeAsync(newProductImages);
+            //await _productImageFileWriteRepository.SaveAsync();
+
+
+            //uzun versiya
 
             //foreach (var image in productVM.ImageFiles)
             //{
@@ -119,7 +117,7 @@ namespace ETicaretApi.API.Controllers
             //        await _productImageFileWriteRepository.SaveAsync();
             //    }
             //}
-            return StatusCode((int)HttpStatusCode.Created);
+
         }
 
         [HttpPut]
