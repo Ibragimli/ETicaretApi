@@ -1,5 +1,7 @@
 ﻿using ETicaretApi.Application.Abstractions;
 using ETicaretApi.Application.Abstractions.Storage;
+using ETicaretApi.Application.Features.Commands.Product.DeleteProduct;
+using ETicaretApi.Application.Features.Commands.Product.PutProduct;
 using ETicaretApi.Application.Repositories.Product;
 using ETicaretApi.Application.Repositories.ProductImage;
 using ETicaretApi.Application.Services;
@@ -7,6 +9,7 @@ using ETicaretApi.Application.ViewModels.Products;
 using ETicaretApi.Domain.Entities;
 using ETicaretApi.Persistence.Repositories.Product;
 using ETicaretApi.Persistence.Repositories.ProductImage;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
@@ -23,15 +26,17 @@ namespace ETicaretApi.API.Controllers
         private readonly IProductReadRepository _productReadRepository;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IProductImageWriteRepository _productImageFileWriteRepository;
+        private readonly IMediator _mediator;
         private readonly IProductImageReadRepository _productImageRead;
         private readonly IProductImageReadRepository _productImageReadRepository;
         private readonly IStorageService _storageService;
         private readonly IFileService _fileService;
         private readonly IProductWriteRepository _productWriteRepository;
 
-        public ProductsController(IProductImageReadRepository productImageRead, IProductImageReadRepository productImageReadRepository, IStorageService storageService, IFileService fileService, IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, IWebHostEnvironment webHostEnvironment, IProductImageWriteRepository productImageFileWriteRepository)
+        public ProductsController(IMediator mediator, IProductImageReadRepository productImageRead, IProductImageReadRepository productImageReadRepository, IStorageService storageService, IFileService fileService, IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, IWebHostEnvironment webHostEnvironment, IProductImageWriteRepository productImageFileWriteRepository)
         {
             _productImageFileWriteRepository = productImageFileWriteRepository;
+            _mediator = mediator;
             _productImageRead = productImageRead;
             _productImageReadRepository = productImageReadRepository;
             _storageService = storageService;
@@ -103,8 +108,6 @@ namespace ETicaretApi.API.Controllers
             //        ProductId = newProduct.Id,
             //        Image = image.Name,
             //    };
-
-
             //    if (await _productImageFileWriteRepository.AddExistAsync(newPrdImage))
             //    {
             //        //await Uplaod(productVM.ImageFiles);
@@ -115,21 +118,20 @@ namespace ETicaretApi.API.Controllers
             //        }
             //        await _productImageFileWriteRepository.SaveAsync();
             //    }
-
-
             //}
             return StatusCode((int)HttpStatusCode.Created);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put(ProductUpdateVM updateVM)
+        public async Task<IActionResult> Put(PutProductCommandRequest putProductCommandRequest)
         {
-            Product product = await _productReadRepository.GetByIdAsync(updateVM.Id);
-            product.Stock = updateVM.Stock;
-            product.Name = updateVM.Name;
-            product.Price = updateVM.Price;
-            await _productWriteRepository.SaveAsync();
-            return StatusCode((int)HttpStatusCode.OK);
+            //Product product = await _productReadRepository.GetByIdAsync(updateVM.Id);
+            //product.Stock = updateVM.Stock;
+            //product.Name = updateVM.Name;
+            //product.Price = updateVM.Price;
+            //await _productWriteRepository.SaveAsync();
+            var response = await _mediator.Send(putProductCommandRequest);
+            return Ok(response);
         }
 
         //[HttpDelete("{id}")]
@@ -141,20 +143,22 @@ namespace ETicaretApi.API.Controllers
         //}
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(DeleteProductCommandRequest deleteProductCommandRequest)
         {
-            if (!await _productReadRepository.IsExistAsync(id))
-                return Ok("tapilmadi");
-            foreach (var image in _productImageRead.GetWhere(x => x.ProductId == id).ToList())
-            {
-                await _productImageFileWriteRepository.RemoveAsync(image.Id);
-                await _storageService.DeleteAsync("files", image.Path);
+            //if (!await _productReadRepository.IsExistAsync(id))
+            //    return Ok("tapilmadi");
+            //foreach (var image in _productImageRead.GetWhere(x => x.ProductId == id).ToList())
+            //{
+            //    await _productImageFileWriteRepository.RemoveAsync(image.Id);
+            //    await _storageService.DeleteAsync("files", image.Path);
 
-            }
-            await _productWriteRepository.RemoveAsync(id);
-            await _productWriteRepository.SaveAsync();
+            //}
+            //await _productWriteRepository.RemoveAsync(id);
+            //await _productWriteRepository.SaveAsync();
 
-            return StatusCode((int)HttpStatusCode.Accepted);
+            //return StatusCode((int)HttpStatusCode.Accepted);
+            var response = await _mediator.Send(deleteProductCommandRequest);
+            return Ok(response);
         }
 
 
@@ -162,12 +166,9 @@ namespace ETicaretApi.API.Controllers
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Uplaod([FromForm] List<IFormFile> formFiles)
         {
-
             //await _fileService.UploadAsync("resource/productImages", Request.Form.Files);
             var images = await _storageService.UploadAsync("files", Request.Form.Files);
             //await _storageService.UploadAsync("resource/productImages", Request.Form.Files);
-
-
             return Ok();
         }
     }
