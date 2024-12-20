@@ -4,12 +4,14 @@ using ETicaretApi.Application.Repositories.Customer;
 using ETicaretApi.Application.Repositories.Order;
 using ETicaretApi.Application.Repositories.Product;
 using ETicaretApi.Application.Repositories.ProductImage;
+using ETicaretApi.Domain.Entities.Identity;
 using ETicaretApi.Persistence.Concretes;
 using ETicaretApi.Persistence.Contexts;
 using ETicaretApi.Persistence.Repositories.Customer;
 using ETicaretApi.Persistence.Repositories.Order;
 using ETicaretApi.Persistence.Repositories.Product;
 using ETicaretApi.Persistence.Repositories.ProductImage;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -35,8 +37,16 @@ namespace ETicaretApi.Persistence
             services.AddScoped<IOrderReadRepository, OrderReadRepository>();
             services.AddScoped<IProductImageReadRepository, ProductImageReadRepository>();
             services.AddScoped<IProductImageWriteRepository, ProductImageWriteRepository>();
-
-
+            // Identity Konfigürasyonu
+            services.AddIdentity<AppUser, AppRole>(options =>
+            {
+                options.Password.RequireDigit = false; // Örnek yapılandırma
+                options.Password.RequiredLength = 6;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+            })
+            .AddEntityFrameworkStores<DataContext>()
+            .AddDefaultTokenProviders();
         }
     }
 }

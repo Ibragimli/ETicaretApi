@@ -1,5 +1,7 @@
 ﻿using ETicaretApi.Domain.Entities;
 using ETicaretApi.Domain.Entities.Common;
+using ETicaretApi.Domain.Entities.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
@@ -10,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace ETicaretApi.Persistence.Contexts
 {
-    public class DataContext : DbContext
+    public class DataContext : IdentityDbContext<AppUser, AppRole, string>
     {
         public DataContext(DbContextOptions options) : base(options)
         {
@@ -19,6 +21,8 @@ namespace ETicaretApi.Persistence.Contexts
         public DbSet<ProductImageFile>  ProductImageFiles{ get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<AppUser> Users { get; set; }
+        public DbSet<AppRole> Roles { get; set; }
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             var datas = ChangeTracker.Entries<BaseEntity>();
