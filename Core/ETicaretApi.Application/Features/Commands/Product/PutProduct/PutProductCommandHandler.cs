@@ -1,6 +1,7 @@
 ﻿using ETicaretApi.Application.Features.Commands.Product.DeleteProduct;
 using ETicaretApi.Application.Repositories.Product;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +15,13 @@ namespace ETicaretApi.Application.Features.Commands.Product.PutProduct
     {
         private readonly IProductReadRepository _productReadRepository;
         private readonly IProductWriteRepository _productWriteRepository;
+        private readonly ILogger<PutProductCommandHandler> _logger;
 
-        public PutProductCommandHandler(IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository)
+        public PutProductCommandHandler(IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository, ILogger<PutProductCommandHandler> logger)
         {
             _productReadRepository = productReadRepository;
             _productWriteRepository = productWriteRepository;
+            _logger = logger;
         }
         public async Task<PutProductCommandResponse> Handle(PutProductCommandRequest request, CancellationToken cancellationToken)
         {
@@ -27,6 +30,7 @@ namespace ETicaretApi.Application.Features.Commands.Product.PutProduct
             product.Name = request.Name;
             product.Price = request.Price;
             await _productWriteRepository.SaveAsync();
+            _logger.LogInformation("Product update");       
             return new PutProductCommandResponse
             {
                 Success = true,

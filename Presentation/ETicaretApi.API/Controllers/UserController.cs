@@ -32,9 +32,7 @@ namespace ETicaretApi.API.Controllers
             }
             catch (Exception ms)
             {
-
                 return Ok(ms.Message);
-
             }
             return Ok(response);
         }

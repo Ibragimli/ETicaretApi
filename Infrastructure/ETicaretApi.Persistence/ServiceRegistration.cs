@@ -1,4 +1,5 @@
 ﻿using ETicaretApi.Application.Abstractions;
+using ETicaretApi.Application.Abstractions.Services;
 using ETicaretApi.Application.Repositories;
 using ETicaretApi.Application.Repositories.Customer;
 using ETicaretApi.Application.Repositories.Order;
@@ -11,6 +12,7 @@ using ETicaretApi.Persistence.Repositories.Customer;
 using ETicaretApi.Persistence.Repositories.Order;
 using ETicaretApi.Persistence.Repositories.Product;
 using ETicaretApi.Persistence.Repositories.ProductImage;
+using ETicaretApi.Persistence.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,6 +39,9 @@ namespace ETicaretApi.Persistence
             services.AddScoped<IOrderReadRepository, OrderReadRepository>();
             services.AddScoped<IProductImageReadRepository, ProductImageReadRepository>();
             services.AddScoped<IProductImageWriteRepository, ProductImageWriteRepository>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthService, AuthService>();
+
             // Identity Konfigürasyonu
             services.AddIdentity<AppUser, AppRole>(options =>
             {
