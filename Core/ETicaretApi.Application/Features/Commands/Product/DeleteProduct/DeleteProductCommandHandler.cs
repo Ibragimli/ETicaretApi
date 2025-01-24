@@ -3,11 +3,6 @@ using ETicaretApi.Application.Features.Commands.Product.DeleteProduct;
 using ETicaretApi.Application.Repositories.Product;
 using ETicaretApi.Application.Repositories.ProductImage;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ETicaretApi.Application.Features.Commands.DeleteProduct
 {
@@ -46,7 +41,7 @@ namespace ETicaretApi.Application.Features.Commands.DeleteProduct
             {
                 Success = true,
                 Message = "Product successfully deleted"
-            };  
+            };
         }
     }
 }

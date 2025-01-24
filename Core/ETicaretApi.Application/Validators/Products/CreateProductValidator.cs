@@ -1,10 +1,5 @@
 ﻿using ETicaretApi.Application.ViewModels.Products;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ETicaretApi.Application.Validators.Products
 {

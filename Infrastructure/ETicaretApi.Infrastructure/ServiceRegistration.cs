@@ -1,5 +1,4 @@
 ﻿using ETicaretApi.Application.Abstractions.Storage;
-using ETicaretApi.Application.Abstractions.Storage.Local;
 using ETicaretApi.Application.Abstractions.Tokens;
 using ETicaretApi.Application.Services;
 using ETicaretApi.Infrastructure.Enums;
@@ -9,11 +8,6 @@ using ETicaretApi.Infrastructure.Service.Storage.Azure;
 using ETicaretApi.Infrastructure.Service.Storage.Local;
 using ETicaretApi.Infrastructure.Service.Tokens;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ETicaretApi.Infrastructure
 {

@@ -1,12 +1,6 @@
 ﻿using ETicaretApi.Application.Abstractions.Services;
 using ETicaretApi.Application.DTOs;
 using MediatR;
-using Microsoft.AspNetCore.Authentication;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ETicaretApi.Application.Features.Commands.User.RefreshTokenLogin
 {

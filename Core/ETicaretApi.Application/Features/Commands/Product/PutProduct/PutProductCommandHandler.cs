@@ -1,13 +1,6 @@
-﻿using ETicaretApi.Application.Features.Commands.Product.DeleteProduct;
-using ETicaretApi.Application.Repositories.Product;
+﻿using ETicaretApi.Application.Repositories.Product;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace ETicaretApi.Application.Features.Commands.Product.PutProduct
 {
@@ -30,7 +23,7 @@ namespace ETicaretApi.Application.Features.Commands.Product.PutProduct
             product.Name = request.Name;
             product.Price = request.Price;
             await _productWriteRepository.SaveAsync();
-            _logger.LogInformation("Product update");       
+            _logger.LogInformation("Product update");
             return new PutProductCommandResponse
             {
                 Success = true,

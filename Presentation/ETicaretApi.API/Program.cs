@@ -1,12 +1,13 @@
 using ETicaretApi.API.Configurations;
+using ETicaretApi.API.Extensions;
 using ETicaretApi.Application;
 using ETicaretApi.Application.Validators.Products;
 using ETicaretApi.Infrastructure;
 using ETicaretApi.Infrastructure.Filters;
 using ETicaretApi.Infrastructure.Service.Storage.Azure;
-using ETicaretApi.Infrastructure.Service.Storage.Local;
 using ETicaretApi.Persistence;
 using ETicaretApi.Persistence.Contexts;
+using ETicaretApi.SignalR;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpLogging;
@@ -15,16 +16,17 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Context;
 using Serilog.Core;
-using Serilog.Debugging;
 using Serilog.Sinks.MSSqlServer;
 using System.Collections.ObjectModel;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddPersistenceServices();
 builder.Services.AddInfrastructureServices();
 builder.Services.AddApplicationServices();
+builder.Services.AddSignalRServices();
 
 //builder.Services.AddStorage<LocalStorage>();
 builder.Services.AddStorage<AzureStorage>();
@@ -32,7 +34,7 @@ builder.Services.AddStorage<AzureStorage>();
 
 
 builder.Services.AddCors(opt => opt.AddDefaultPolicy(policy =>
-    policy.WithOrigins("https://localhost:7151").WithOrigins("http://localhost:7151").AllowAnyHeader().AllowAnyMethod()));
+    policy.WithOrigins("https://localhost:7151").WithOrigins("http://localhost:7151").AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
 
 builder.Services.AddControllers(options => options.Filters.Add<ValidationFilter>())
     .AddFluentValidation(configuration => configuration.RegisterValidatorsFromAssemblyContaining<CreateProductValidator>());
@@ -115,6 +117,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+app.ConfigureExceptionHandler<Program>(app.Services.GetRequiredService<ILogger<Program>>());
+
 app.UseStaticFiles();
 app.UseSerilogRequestLogging();
 //htttpLog
@@ -135,5 +140,6 @@ app.Use(async (context, next) =>
 });
 
 app.MapControllers();
+app.MapHubs();
 
 app.Run();

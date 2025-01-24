@@ -1,13 +1,6 @@
 ﻿using ETicaretApi.Application.Abstractions.Storage.Local;
-using ETicaretApi.Domain.Entities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
 
 namespace ETicaretApi.Infrastructure.Service.Storage.Local
 {
@@ -59,7 +52,7 @@ namespace ETicaretApi.Infrastructure.Service.Storage.Local
                 string filename = file.FileName;
                 filename = filename.Length <= 64 ? (filename) : (filename.Substring(filename.Length - 64, 64));
                 filename = Guid.NewGuid().ToString() + filename;
-                string path = Path.Combine(_webHostEnvironment.WebRootPath,pathOrContainer, filename);
+                string path = Path.Combine(_webHostEnvironment.WebRootPath, pathOrContainer, filename);
 
                 using (FileStream stream = new FileStream(path, FileMode.Create))
                 {

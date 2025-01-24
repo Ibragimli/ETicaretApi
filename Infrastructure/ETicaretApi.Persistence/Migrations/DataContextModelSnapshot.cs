@@ -22,6 +22,66 @@ namespace ETicaretApi.Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("ETicaretApi.Domain.Entities.Basket", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Baskets");
+                });
+
+            modelBuilder.Entity("ETicaretApi.Domain.Entities.BasketItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("BasketId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdateTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BasketId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("BasketItems");
+                });
+
             modelBuilder.Entity("ETicaretApi.Domain.Entities.Customer", b =>
                 {
                     b.Property<int>("Id")
@@ -151,10 +211,7 @@ namespace ETicaretApi.Persistence.Migrations
             modelBuilder.Entity("ETicaretApi.Domain.Entities.Order", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Adress")
                         .IsRequired()
@@ -231,12 +288,13 @@ namespace ETicaretApi.Persistence.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("Showcase")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("UpdateTime")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
 
                     b.ToTable("ProductImageFiles");
                 });
@@ -362,6 +420,51 @@ namespace ETicaretApi.Persistence.Migrations
                     b.ToTable("OrderProduct");
                 });
 
+            modelBuilder.Entity("ProductProductImageFile", b =>
+                {
+                    b.Property<int>("ProductImageFilesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductImageFilesId", "ProductsId");
+
+                    b.HasIndex("ProductsId");
+
+                    b.ToTable("ProductProductImageFile");
+                });
+
+            modelBuilder.Entity("ETicaretApi.Domain.Entities.Basket", b =>
+                {
+                    b.HasOne("ETicaretApi.Domain.Entities.Identity.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ETicaretApi.Domain.Entities.BasketItem", b =>
+                {
+                    b.HasOne("ETicaretApi.Domain.Entities.Basket", "Basket")
+                        .WithMany("BasketItems")
+                        .HasForeignKey("BasketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ETicaretApi.Domain.Entities.Product", "Product")
+                        .WithMany("BasketItems")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Basket");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("ETicaretApi.Domain.Entities.Order", b =>
                 {
                     b.HasOne("ETicaretApi.Domain.Entities.Customer", "Customer")
@@ -370,18 +473,15 @@ namespace ETicaretApi.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Customer");
-                });
-
-            modelBuilder.Entity("ETicaretApi.Domain.Entities.ProductImageFile", b =>
-                {
-                    b.HasOne("ETicaretApi.Domain.Entities.Product", "Product")
-                        .WithMany("ProductImageFiles")
-                        .HasForeignKey("ProductId")
+                    b.HasOne("ETicaretApi.Domain.Entities.Basket", "Basket")
+                        .WithOne("Order")
+                        .HasForeignKey("ETicaretApi.Domain.Entities.Order", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Product");
+                    b.Navigation("Basket");
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -450,6 +550,29 @@ namespace ETicaretApi.Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ProductProductImageFile", b =>
+                {
+                    b.HasOne("ETicaretApi.Domain.Entities.ProductImageFile", null)
+                        .WithMany()
+                        .HasForeignKey("ProductImageFilesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ETicaretApi.Domain.Entities.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ETicaretApi.Domain.Entities.Basket", b =>
+                {
+                    b.Navigation("BasketItems");
+
+                    b.Navigation("Order")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ETicaretApi.Domain.Entities.Customer", b =>
                 {
                     b.Navigation("Orders");
@@ -457,7 +580,7 @@ namespace ETicaretApi.Persistence.Migrations
 
             modelBuilder.Entity("ETicaretApi.Domain.Entities.Product", b =>
                 {
-                    b.Navigation("ProductImageFiles");
+                    b.Navigation("BasketItems");
                 });
 #pragma warning restore 612, 618
         }

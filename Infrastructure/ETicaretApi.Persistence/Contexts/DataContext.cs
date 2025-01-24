@@ -4,11 +4,6 @@ using ETicaretApi.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ETicaretApi.Persistence.Contexts
 {
@@ -18,11 +13,19 @@ namespace ETicaretApi.Persistence.Contexts
         {
         }
         public DbSet<Product> Products { get; set; }
-        public DbSet<ProductImageFile>  ProductImageFiles{ get; set; }
+        public DbSet<ProductImageFile> ProductImageFiles { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<Basket> Baskets { get; set; }
+        public DbSet<BasketItem> BasketItems { get; set; }
         public DbSet<AppUser> Users { get; set; }
         public DbSet<AppRole> Roles { get; set; }
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Order>().HasKey(b => b.Id);
+            builder.Entity<Basket>().HasOne(b => b.Order).WithOne(o => o.Basket).HasForeignKey<Order>(b => b.Id);
+            base.OnModelCreating(builder);
+        }
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             var datas = ChangeTracker.Entries<BaseEntity>();

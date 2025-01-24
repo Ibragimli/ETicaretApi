@@ -27,9 +27,11 @@
     <ProjectReference Include="..\..\Core\ETicaretApi.Application\ETicaretApi.Application.csproj" />
     <ProjectReference Include="..\..\Infrastructure\ETicaretApi.Infrastructure\ETicaretApi.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Infrastructure\ETicaretApi.Persistence\ETicaretApi.Persistence.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\ETicaretApi.SignalR\ETicaretApi.SignalR.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Middlewares\" />
     <Folder Include="wwwroot\" />
     <Folder Include="wwwroot\resource\productImages\" />
   </ItemGroup>

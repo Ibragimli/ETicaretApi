@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ETicaretApi.Application.Abstractions.Storage.Local
+﻿namespace ETicaretApi.Application.Abstractions.Storage.Local
 {
-    public interface ILocalStorage:IStorage
+    public interface ILocalStorage : IStorage
     {
     }
 }

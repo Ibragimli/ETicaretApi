@@ -6,11 +6,6 @@ using ETicaretApi.Domain.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ETicaretApi.Application.Features.Commands.User.LoginUser
 {
@@ -42,9 +37,9 @@ namespace ETicaretApi.Application.Features.Commands.User.LoginUser
 
             if (result.Succeeded)
             {
-                Token token = _tokenHandler.CreateAccesToken(20, user);
+                Token token = _tokenHandler.CreateAccesToken(400, user);
 
-                await _userService.UpdateRefreshToken(token.RefreshToken, user.Id, token.Expiration, 15);
+                await _userService.UpdateRefreshToken(token.RefreshToken, user.Id, token.Expiration, 405);
                 _logger.LogInformation(user.Name + "-hesaba daxil oldu.");
                 return new LoginUserCommandResponse()
                 {

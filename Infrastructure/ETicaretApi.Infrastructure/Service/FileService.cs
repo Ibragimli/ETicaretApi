@@ -1,12 +1,6 @@
 ﻿using ETicaretApi.Application.Services;
-using ETicaretApi.Infrastructure.Operation;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ETicaretApi.Infrastructure.Service
 {
@@ -18,7 +12,7 @@ namespace ETicaretApi.Infrastructure.Service
         {
             _webHostEnvironment = webHostEnvironment;
         }
-      
+
         public async Task<List<(string fileName, string path)>> UploadAsync(string path, IFormFileCollection files)
         {
             string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "resource/product-images");

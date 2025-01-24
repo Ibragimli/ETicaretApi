@@ -2,13 +2,7 @@
 using ETicaretApi.Domain.Entities.Common;
 using ETicaretApi.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ETicaretApi.Persistence.Repositories
 {
@@ -35,7 +29,7 @@ namespace ETicaretApi.Persistence.Repositories
             if (!tracking)
                 query = query.AsNoTracking();
             return await query.AnyAsync(data => data.Id == id);
-           
+
         }
         public async Task<T> GetByIdAsync(int id, bool tracking = true)
         {

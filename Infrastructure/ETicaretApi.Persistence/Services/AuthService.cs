@@ -5,12 +5,6 @@ using ETicaretApi.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ETicaretApi.Persistence.Services
 {
@@ -34,8 +28,8 @@ namespace ETicaretApi.Persistence.Services
 
             if (user != null && user?.RefreshTokenEndDate > DateTime.UtcNow)
             {
-                Token token = _tokenHandler.CreateAccesToken(25,user);
-                await _userService.UpdateRefreshToken(token.RefreshToken, user.Id, token.Expiration, 20);
+                Token token = _tokenHandler.CreateAccesToken(500, user);
+                await _userService.UpdateRefreshToken(token.RefreshToken, user.Id, token.Expiration, 500);
                 return token;
             }
             else

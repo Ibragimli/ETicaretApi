@@ -1,8 +1,8 @@
-﻿using ETicaretApi.Application.Abstractions;
-using ETicaretApi.Application.Abstractions.Storage;
+﻿using ETicaretApi.Application.Abstractions.Storage;
 using ETicaretApi.Application.Features.Commands.Product.DeleteProduct;
 using ETicaretApi.Application.Features.Commands.Product.PostProduct;
 using ETicaretApi.Application.Features.Commands.Product.PutProduct;
+using ETicaretApi.Application.Features.Commands.ProductImageFile.ChangeShowcaseImage;
 using ETicaretApi.Application.Repositories.Product;
 using ETicaretApi.Application.Repositories.ProductImage;
 using ETicaretApi.Application.Services;
@@ -15,7 +15,6 @@ namespace ETicaretApi.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = "Admin")]
     public class ProductsController : ControllerBase
     {
         private readonly IProductReadRepository _productReadRepository;
@@ -40,6 +39,17 @@ namespace ETicaretApi.API.Controllers
             _productReadRepository = productReadRepository;
             _webHostEnvironment = webHostEnvironment;
         }
+        [HttpPut("[action]/{imageId}/{productId}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+
+        public async Task<IActionResult> ChangeShowCase([FromQuery] ChangeShowcaseImageCommandRequest changeShowcaseImageCommandRequest)
+        {
+
+            ChangeShowcaseImageCommandResponse response = await _mediator.Send(changeShowcaseImageCommandRequest);
+            return Ok(response);
+        }
+
+
 
         [HttpGet]
         public IActionResult Get()
@@ -64,6 +74,8 @@ namespace ETicaretApi.API.Controllers
 
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = "Admin")]
+
         public async Task<IActionResult> Post([FromForm] PostProductCommandRequest postProductCommandRequest)
         {
             if (!ModelState.IsValid)
@@ -123,6 +135,8 @@ namespace ETicaretApi.API.Controllers
         }
 
         [HttpPut]
+        [Authorize(AuthenticationSchemes = "Admin")]
+
         public async Task<IActionResult> Put(PutProductCommandRequest putProductCommandRequest)
         {
             //Product product = await _productReadRepository.GetByIdAsync(updateVM.Id);
@@ -143,6 +157,8 @@ namespace ETicaretApi.API.Controllers
         //}
 
         [HttpDelete("{id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+
         public async Task<IActionResult> Delete(DeleteProductCommandRequest deleteProductCommandRequest)
         {
             //if (!await _productReadRepository.IsExistAsync(id))
@@ -164,6 +180,7 @@ namespace ETicaretApi.API.Controllers
 
         [HttpPost("[action]")]
         [Consumes("multipart/form-data")]
+        [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> Uplaod([FromForm] List<IFormFile> formFiles)
         {
             //await _fileService.UploadAsync("resource/productImages", Request.Form.Files);
