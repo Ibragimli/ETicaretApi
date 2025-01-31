@@ -1,6 +1,7 @@
 ﻿using ETicaretApi.Application.Abstractions;
 using ETicaretApi.Application.Abstractions.Services;
 using ETicaretApi.Application.Abstractions.Services.Baskets;
+using ETicaretApi.Application.Abstractions.Services.Order;
 using ETicaretApi.Application.Repositories;
 using ETicaretApi.Application.Repositories.Basket;
 using ETicaretApi.Application.Repositories.BasketItem;
@@ -44,6 +45,9 @@ namespace ETicaretApi.Persistence
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IBasketService, BasketService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<ICompletedOrderWriteRepository, CompletedOrderWriteRepository>();
+            services.AddScoped<ICompletedOrderReadRepository, CompletedOrderReadRepository>();
 
 
 
@@ -51,7 +55,7 @@ namespace ETicaretApi.Persistence
             services.AddIdentity<AppUser, AppRole>(options =>
             {
                 options.Password.RequireDigit = false; // Örnek yapılandırma
-                options.Password.RequiredLength = 6;
+                options.Password.RequiredLength = 2;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
             })

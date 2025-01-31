@@ -1,8 +1,12 @@
 ﻿using ETicaretApi.Application.Abstractions.Storage;
+using ETicaretApi.Application.Consts;
+using ETicaretApi.Application.CustomAttributes;
+using ETicaretApi.Application.Enums;
 using ETicaretApi.Application.Features.Commands.Product.DeleteProduct;
 using ETicaretApi.Application.Features.Commands.Product.PostProduct;
 using ETicaretApi.Application.Features.Commands.Product.PutProduct;
 using ETicaretApi.Application.Features.Commands.ProductImageFile.ChangeShowcaseImage;
+using ETicaretApi.Application.Features.Queries.Basket.GetBasketItems;
 using ETicaretApi.Application.Repositories.Product;
 using ETicaretApi.Application.Repositories.ProductImage;
 using ETicaretApi.Application.Services;
@@ -51,8 +55,9 @@ namespace ETicaretApi.API.Controllers
 
 
 
-        [HttpGet]
-        public IActionResult Get()
+      
+        [HttpGet("GetAll")]
+        public IActionResult GetAll()
         {
             return Ok(_productReadRepository.GetAll());
         }
@@ -73,9 +78,17 @@ namespace ETicaretApi.API.Controllers
         //}
 
 
-        [HttpPost]
-        [Authorize(AuthenticationSchemes = "Admin")]
+        [HttpGet]
+        //[Authorize(AuthenticationSchemes = "Admin")]
+        [AuthorizeDefiniton(Menu = AuthorizeDefinationConstants.Products, ActionType = Application.Enums.ActionType.Reading)]
+        public async Task<IActionResult> GetBasketItems([FromQuery] GetBasketItemsQueriesRequest getBasketItemsQueriesRequest)
+        {
+            List<GetBasketItemsQueriesResponse> response = await _mediator.Send(getBasketItemsQueriesRequest);
+            return Ok(response);
+        }
 
+        [HttpPost]
+        [AuthorizeDefiniton(Menu = AuthorizeDefinationConstants.Products, ActionType = Application.Enums.ActionType.Writing)]
         public async Task<IActionResult> Post([FromForm] PostProductCommandRequest postProductCommandRequest)
         {
             if (!ModelState.IsValid)
@@ -133,10 +146,10 @@ namespace ETicaretApi.API.Controllers
             //}
 
         }
-
+        
         [HttpPut]
         [Authorize(AuthenticationSchemes = "Admin")]
-
+        [AuthorizeDefiniton(Menu = AuthorizeDefinationConstants.Products, ActionType = Application.Enums.ActionType.Writing)]
         public async Task<IActionResult> Put(PutProductCommandRequest putProductCommandRequest)
         {
             //Product product = await _productReadRepository.GetByIdAsync(updateVM.Id);
@@ -158,7 +171,7 @@ namespace ETicaretApi.API.Controllers
 
         [HttpDelete("{id}")]
         [Authorize(AuthenticationSchemes = "Admin")]
-
+        [AuthorizeDefiniton(Menu = AuthorizeDefinationConstants.Products, ActionType = Application.Enums.ActionType.Deleting)]
         public async Task<IActionResult> Delete(DeleteProductCommandRequest deleteProductCommandRequest)
         {
             //if (!await _productReadRepository.IsExistAsync(id))
@@ -181,6 +194,7 @@ namespace ETicaretApi.API.Controllers
         [HttpPost("[action]")]
         [Consumes("multipart/form-data")]
         [Authorize(AuthenticationSchemes = "Admin")]
+        [AuthorizeDefiniton(Menu = AuthorizeDefinationConstants.Products, ActionType = Application.Enums.ActionType.Updating)]
         public async Task<IActionResult> Uplaod([FromForm] List<IFormFile> formFiles)
         {
             //await _fileService.UploadAsync("resource/productImages", Request.Form.Files);

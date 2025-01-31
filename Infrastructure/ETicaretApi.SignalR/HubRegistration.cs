@@ -8,6 +8,7 @@ namespace ETicaretApi.SignalR
         public static void MapHubs(this WebApplication application)
         {
             application.MapHub<ProductHub>("product/hub");
+            application.MapHub<OrderHub>("order/hub");
 
         }
     }

@@ -20,10 +20,14 @@ namespace ETicaretApi.Persistence.Contexts
         public DbSet<BasketItem> BasketItems { get; set; }
         public DbSet<AppUser> Users { get; set; }
         public DbSet<AppRole> Roles { get; set; }
+        public DbSet<CompletedOrder> CompletedOrders { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Order>().HasKey(b => b.Id);
+
+            builder.Entity<Order>().HasIndex(b => b.OrderCode).IsUnique();
             builder.Entity<Basket>().HasOne(b => b.Order).WithOne(o => o.Basket).HasForeignKey<Order>(b => b.Id);
+            builder.Entity<Order>().HasOne(b => b.CompletedOrder).WithOne(o => o.Order).HasForeignKey<CompletedOrder>(b => b.OrderId);
             base.OnModelCreating(builder);
         }
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

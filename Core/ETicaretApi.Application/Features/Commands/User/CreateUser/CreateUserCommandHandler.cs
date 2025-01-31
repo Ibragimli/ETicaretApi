@@ -8,12 +8,10 @@ namespace ETicaretApi.Application.Features.Commands.User.CreateUser
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommandRequest, CreateUserCommandResponse>
     {
         private readonly UserManager<AppUser> _userManager;
-        private readonly RoleManager<AppRole> _roleManager;
 
-        public CreateUserCommandHandler(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
+        public CreateUserCommandHandler(UserManager<AppUser> userManager)
         {
             _userManager = userManager;
-            _roleManager = roleManager;
         }
         public async Task<CreateUserCommandResponse> Handle(CreateUserCommandRequest request, CancellationToken cancellationToken)
         {

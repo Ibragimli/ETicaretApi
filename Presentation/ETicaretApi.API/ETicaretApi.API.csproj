@@ -4,6 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>9f61256a-4b25-43db-b037-a03d30d8f1dd</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,7 +33,7 @@
 
   <ItemGroup>
     <Folder Include="Middlewares\" />
-    <Folder Include="wwwroot\" />
+    <Folder Include="wwwroot\files\" />
     <Folder Include="wwwroot\resource\productImages\" />
   </ItemGroup>
 

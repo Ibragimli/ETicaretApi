@@ -47,6 +47,8 @@ namespace ETicaretApi.Infrastructure.Service.Storage.Local
         //}
         public async Task<List<(string fileName, string pathOrContainerName)>> UploadAsync(string pathOrContainer, IFormFileCollection files)
         {
+            List<(string fileName, string path)> datas = new();
+
             foreach (var file in files)
             {
                 string filename = file.FileName;
@@ -58,10 +60,12 @@ namespace ETicaretApi.Infrastructure.Service.Storage.Local
                 {
                     file.CopyTo(stream);
                 }
+                datas.Add((filename, $"{path}\\{filename}"));
+
             }
 
 
-            return null;
+            return datas;
         }
     }
 }

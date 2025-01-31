@@ -32,6 +32,25 @@ namespace ETicaretApi.Persistence.Services
             _orderReadRepository = orderReadRepository;
             _basketWriteRepository = basketWriteRepository;
         }
+        public Basket? GetUserActiveBasket
+        {
+            get
+            {
+                //Basket? basket = ContextUser().Result;
+                //return basket;
+                try
+                {
+                    Basket? basket = ContextUser().Result;
+                    return basket;
+                }
+                catch (Exception ex)
+                {
+                    // Hata detaylarını logla veya özel bir mesaj döndür
+                    throw new Exception("Error getting active basket: " + ex.Message, ex);
+                }
+            }
+
+        }
         private async Task<Basket?> ContextUser()
         {
             AppUser? user = new AppUser();
@@ -57,7 +76,16 @@ namespace ETicaretApi.Persistence.Services
                     targetBasket = new();
                     user.Baskets.Add(targetBasket);
                 }
-                await _basketWriteRepository.SaveAsync();
+                try
+                {
+                    await _basketWriteRepository.SaveAsync();
+                }
+                catch (Exception ex)
+                {
+                    // İç hatayı ve mesajı logla
+                    throw new Exception("An error occurred while saving the entity changes.", ex.InnerException);
+                }
+                //await _basketWriteRepository.SaveAsync();
 
                 return targetBasket;
             }

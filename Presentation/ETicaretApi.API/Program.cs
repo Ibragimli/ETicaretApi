@@ -5,6 +5,7 @@ using ETicaretApi.Application.Validators.Products;
 using ETicaretApi.Infrastructure;
 using ETicaretApi.Infrastructure.Filters;
 using ETicaretApi.Infrastructure.Service.Storage.Azure;
+using ETicaretApi.Infrastructure.Service.Storage.Local;
 using ETicaretApi.Persistence;
 using ETicaretApi.Persistence.Contexts;
 using ETicaretApi.SignalR;
@@ -28,9 +29,9 @@ builder.Services.AddInfrastructureServices();
 builder.Services.AddApplicationServices();
 builder.Services.AddSignalRServices();
 
-//builder.Services.AddStorage<LocalStorage>();
-builder.Services.AddStorage<AzureStorage>();
-//builder.Services.AddStorage(ETicaretApi.Infrastructure.Enums.StorageType.Local);
+builder.Services.AddStorage<LocalStorage>();
+//builder.Services.AddStorage<AzureStorage>();
+builder.Services.AddStorage(ETicaretApi.Infrastructure.Enums.StorageType.Local);
 
 
 builder.Services.AddCors(opt => opt.AddDefaultPolicy(policy =>
