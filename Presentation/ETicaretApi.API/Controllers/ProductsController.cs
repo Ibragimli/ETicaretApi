@@ -1,10 +1,12 @@
-﻿using ETicaretApi.Application.Abstractions.Storage;
+﻿using ETicaretApi.Application.Abstractions.Services;
+using ETicaretApi.Application.Abstractions.Storage;
 using ETicaretApi.Application.Consts;
 using ETicaretApi.Application.CustomAttributes;
 using ETicaretApi.Application.Enums;
 using ETicaretApi.Application.Features.Commands.Product.DeleteProduct;
 using ETicaretApi.Application.Features.Commands.Product.PostProduct;
 using ETicaretApi.Application.Features.Commands.Product.PutProduct;
+using ETicaretApi.Application.Features.Commands.Product.UpdateStockQrCodeToProduct;
 using ETicaretApi.Application.Features.Commands.ProductImageFile.ChangeShowcaseImage;
 using ETicaretApi.Application.Features.Queries.Basket.GetBasketItems;
 using ETicaretApi.Application.Repositories.Product;
@@ -25,16 +27,18 @@ namespace ETicaretApi.API.Controllers
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IProductImageWriteRepository _productImageFileWriteRepository;
         private readonly IMediator _mediator;
+        private readonly IProductService _productService;
         private readonly IProductImageReadRepository _productImageRead;
         private readonly IProductImageReadRepository _productImageReadRepository;
         private readonly IStorageService _storageService;
         private readonly IFileService _fileService;
         private readonly IProductWriteRepository _productWriteRepository;
 
-        public ProductsController(IMediator mediator, IProductImageReadRepository productImageRead, IProductImageReadRepository productImageReadRepository, IStorageService storageService, IFileService fileService, IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, IWebHostEnvironment webHostEnvironment, IProductImageWriteRepository productImageFileWriteRepository)
+        public ProductsController(IMediator mediator, IProductService productService, IProductImageReadRepository productImageRead, IProductImageReadRepository productImageReadRepository, IStorageService storageService, IFileService fileService, IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, IWebHostEnvironment webHostEnvironment, IProductImageWriteRepository productImageFileWriteRepository)
         {
             _productImageFileWriteRepository = productImageFileWriteRepository;
             _mediator = mediator;
+            _productService = productService;
             _productImageRead = productImageRead;
             _productImageReadRepository = productImageReadRepository;
             _storageService = storageService;
@@ -55,7 +59,7 @@ namespace ETicaretApi.API.Controllers
 
 
 
-      
+
         [HttpGet("GetAll")]
         public IActionResult GetAll()
         {
@@ -146,7 +150,7 @@ namespace ETicaretApi.API.Controllers
             //}
 
         }
-        
+
         [HttpPut]
         [Authorize(AuthenticationSchemes = "Admin")]
         [AuthorizeDefinition(Menu = AuthorizeDefinationConstants.Products, ActionType = Application.Enums.ActionType.Writing)]
@@ -169,6 +173,19 @@ namespace ETicaretApi.API.Controllers
         //    return StatusCode((int)HttpStatusCode.Accepted);
         //}
 
+        [HttpGet("qrcode/{productId}")]
+        public async Task<IActionResult> GetQrCodeToProduct([FromRoute] int productId)
+        {
+            var data = await _productService.QrCodeToProductAsync(productId);
+            return File(data, "image/png");
+        }
+
+        [HttpPut("qrcode")]
+        public async Task<IActionResult> UpdateStockQrCodeToProduct(UpdateStockQrCodeToProductCommandRequest updateStockQrCodeToProductCommandRequest)
+        {
+            UpdateStockQrCodeToProductCommandResponse response = await _mediator.Send(updateStockQrCodeToProductCommandRequest);
+            return Ok(response);
+        }
         [HttpDelete("{id}")]
         [Authorize(AuthenticationSchemes = "Admin")]
         [AuthorizeDefinition(Menu = AuthorizeDefinationConstants.Products, ActionType = Application.Enums.ActionType.Deleting)]

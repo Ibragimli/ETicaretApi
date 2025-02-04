@@ -61,6 +61,7 @@ namespace ETicaretApi.Persistence
             services.AddScoped<IEndpointReadRepository, EndpointReadRepository>();
 
             services.AddScoped<IAuthorizationEndpointService, AuthorizationEndpointService>();
+            services.AddScoped<IProductService, ProductService>();
 
 
 
