@@ -80,7 +80,7 @@ namespace ETicaretApi.API.Controllers
 
         [HttpGet]
         //[Authorize(AuthenticationSchemes = "Admin")]
-        [AuthorizeDefiniton(Menu = AuthorizeDefinationConstants.Products, ActionType = Application.Enums.ActionType.Reading)]
+        [AuthorizeDefinition(Menu = AuthorizeDefinationConstants.Products, ActionType = Application.Enums.ActionType.Reading)]
         public async Task<IActionResult> GetBasketItems([FromQuery] GetBasketItemsQueriesRequest getBasketItemsQueriesRequest)
         {
             List<GetBasketItemsQueriesResponse> response = await _mediator.Send(getBasketItemsQueriesRequest);
@@ -88,7 +88,7 @@ namespace ETicaretApi.API.Controllers
         }
 
         [HttpPost]
-        [AuthorizeDefiniton(Menu = AuthorizeDefinationConstants.Products, ActionType = Application.Enums.ActionType.Writing)]
+        [AuthorizeDefinition(Menu = AuthorizeDefinationConstants.Products, ActionType = Application.Enums.ActionType.Writing)]
         public async Task<IActionResult> Post([FromForm] PostProductCommandRequest postProductCommandRequest)
         {
             if (!ModelState.IsValid)
@@ -149,7 +149,7 @@ namespace ETicaretApi.API.Controllers
         
         [HttpPut]
         [Authorize(AuthenticationSchemes = "Admin")]
-        [AuthorizeDefiniton(Menu = AuthorizeDefinationConstants.Products, ActionType = Application.Enums.ActionType.Writing)]
+        [AuthorizeDefinition(Menu = AuthorizeDefinationConstants.Products, ActionType = Application.Enums.ActionType.Writing)]
         public async Task<IActionResult> Put(PutProductCommandRequest putProductCommandRequest)
         {
             //Product product = await _productReadRepository.GetByIdAsync(updateVM.Id);
@@ -171,7 +171,7 @@ namespace ETicaretApi.API.Controllers
 
         [HttpDelete("{id}")]
         [Authorize(AuthenticationSchemes = "Admin")]
-        [AuthorizeDefiniton(Menu = AuthorizeDefinationConstants.Products, ActionType = Application.Enums.ActionType.Deleting)]
+        [AuthorizeDefinition(Menu = AuthorizeDefinationConstants.Products, ActionType = Application.Enums.ActionType.Deleting)]
         public async Task<IActionResult> Delete(DeleteProductCommandRequest deleteProductCommandRequest)
         {
             //if (!await _productReadRepository.IsExistAsync(id))
@@ -194,7 +194,7 @@ namespace ETicaretApi.API.Controllers
         [HttpPost("[action]")]
         [Consumes("multipart/form-data")]
         [Authorize(AuthenticationSchemes = "Admin")]
-        [AuthorizeDefiniton(Menu = AuthorizeDefinationConstants.Products, ActionType = Application.Enums.ActionType.Updating)]
+        [AuthorizeDefinition(Menu = AuthorizeDefinationConstants.Products, ActionType = Application.Enums.ActionType.Updating)]
         public async Task<IActionResult> Uplaod([FromForm] List<IFormFile> formFiles)
         {
             //await _fileService.UploadAsync("resource/productImages", Request.Form.Files);

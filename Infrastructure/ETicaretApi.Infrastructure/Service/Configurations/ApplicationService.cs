@@ -32,7 +32,7 @@ namespace ETicaretApi.Infrastructure.Service.Configurations
             {
                 foreach (var controller in controllers)
                 {
-                    var actions = controller.GetMethods().Where(x => x.IsDefined(typeof(AuthorizeDefinitonAttribute)));
+                    var actions = controller.GetMethods().Where(x => x.IsDefined(typeof(AuthorizeDefinitionAttribute)));
                     if (actions != null)
                     {
                         foreach (var action in actions)
@@ -42,7 +42,7 @@ namespace ETicaretApi.Infrastructure.Service.Configurations
                             if (attributes != null)
                             {
                                 Menu menu = null;
-                                var authorizeDefinitionAttribute = attributes.FirstOrDefault(a => a.GetType() == typeof(AuthorizeDefinitonAttribute)) as AuthorizeDefinitonAttribute;
+                                var authorizeDefinitionAttribute = attributes.FirstOrDefault(a => a.GetType() == typeof(AuthorizeDefinitionAttribute)) as AuthorizeDefinitionAttribute;
                                 if (!menus.Any(x => x.Name == authorizeDefinitionAttribute.Menu))
 
                                 {
@@ -54,7 +54,7 @@ namespace ETicaretApi.Infrastructure.Service.Configurations
                                 Application.DTOs.Configuration.Action _action = new()
                                 {
                                     ActionType = Enum.GetName(typeof(ActionType), authorizeDefinitionAttribute.ActionType),
-                                    Definition = authorizeDefinitionAttribute.Definatio,
+                                    Definition = authorizeDefinitionAttribute.Definition,
 
 
                                 };
@@ -63,6 +63,7 @@ namespace ETicaretApi.Infrastructure.Service.Configurations
                                     _action.HttpType = htttAttribute.HttpMethods.First();
                                 else
                                     _action.HttpType = HttpMethods.Get;
+                                _action.Code = $"{controller.Name.Substring(0, controller.Name.Length - 10)}.{_action.HttpType}.{_action.ActionType}";
                                 menu.Actions.Add(_action);
                             }
                         }

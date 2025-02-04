@@ -23,7 +23,7 @@ namespace ETicaretApi.API.Controllers
         }
 
         [HttpGet("GetBasketItems")]
-        [AuthorizeDefiniton(Menu = AuthorizeDefinationConstants.Baskets, ActionType = Application.Enums.ActionType.Reading)]
+        [AuthorizeDefinition(Menu = AuthorizeDefinationConstants.Baskets, ActionType = Application.Enums.ActionType.Reading)]
         public async Task<IActionResult> GetBasketItems([FromQuery] GetBasketItemsQueriesRequest getBasketItemsQueriesRequest)
         {
             List<GetBasketItemsQueriesResponse> response = await _mediator.Send(getBasketItemsQueriesRequest);
@@ -31,7 +31,7 @@ namespace ETicaretApi.API.Controllers
         }
 
         [HttpPost("AddItemToBasket")]
-        [AuthorizeDefiniton(Menu = AuthorizeDefinationConstants.Baskets, ActionType = Application.Enums.ActionType.Writing)]
+        [AuthorizeDefinition(Menu = AuthorizeDefinationConstants.Baskets, ActionType = Application.Enums.ActionType.Writing)]
         public async Task<IActionResult> AddItemToBasket([FromBody] AddItemToBasketCommandRequest addItemToBasketCommandRequest)
         {
             AddItemToBasketCommandResponse response = await _mediator.Send(addItemToBasketCommandRequest);
@@ -39,7 +39,7 @@ namespace ETicaretApi.API.Controllers
         }
 
         [HttpPut("UpdateToBasket")]
-        [AuthorizeDefiniton(Menu = AuthorizeDefinationConstants.Baskets, ActionType = Application.Enums.ActionType.Updating)]
+        [AuthorizeDefinition(Menu = AuthorizeDefinationConstants.Baskets, ActionType = Application.Enums.ActionType.Updating)]
 
         public async Task<IActionResult> UpdateToBasket(UpdateQuantityCommandRequest updateQuantityCommandRequest)
         {
@@ -48,7 +48,7 @@ namespace ETicaretApi.API.Controllers
         }
 
         [HttpDelete("RemoveBasket/{BasketItemId}")]
-        [AuthorizeDefiniton(Menu = AuthorizeDefinationConstants.Baskets, ActionType = Application.Enums.ActionType.Deleting)]
+        [AuthorizeDefinition(Menu = AuthorizeDefinationConstants.Baskets, ActionType = Application.Enums.ActionType.Deleting)]
         public async Task<IActionResult> RemoveBasket(int BasketItemId)
         {
             // RemoveBasketCommandRequest nesnesini oluştur

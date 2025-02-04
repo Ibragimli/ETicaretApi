@@ -6,6 +6,8 @@ using ETicaretApi.Application.Repositories;
 using ETicaretApi.Application.Repositories.Basket;
 using ETicaretApi.Application.Repositories.BasketItem;
 using ETicaretApi.Application.Repositories.Customer;
+using ETicaretApi.Application.Repositories.Endpoint;
+using ETicaretApi.Application.Repositories.Menu;
 using ETicaretApi.Application.Repositories.Order;
 using ETicaretApi.Application.Repositories.Product;
 using ETicaretApi.Application.Repositories.ProductImage;
@@ -15,6 +17,8 @@ using ETicaretApi.Persistence.Contexts;
 using ETicaretApi.Persistence.Repositories.Basket;
 using ETicaretApi.Persistence.Repositories.BasketItem;
 using ETicaretApi.Persistence.Repositories.Customer;
+using ETicaretApi.Persistence.Repositories.Endpoint;
+using ETicaretApi.Persistence.Repositories.Menu;
 using ETicaretApi.Persistence.Repositories.Order;
 using ETicaretApi.Persistence.Repositories.Product;
 using ETicaretApi.Persistence.Repositories.ProductImage;
@@ -45,9 +49,18 @@ namespace ETicaretApi.Persistence
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IBasketService, BasketService>();
+            services.AddScoped<IBasketService, BasketService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<ICompletedOrderWriteRepository, CompletedOrderWriteRepository>();
             services.AddScoped<ICompletedOrderReadRepository, CompletedOrderReadRepository>();
+
+            services.AddScoped<IMenuWriteRepository, MenuWriteRepository>();
+            services.AddScoped<IMenuReadRepository, MenuReadRepository>();
+            services.AddScoped<IEndpointWriteRepository, EndpointWriteRepository>();
+            services.AddScoped<IEndpointReadRepository, EndpointReadRepository>();
+
+            services.AddScoped<IAuthorizationEndpointService, AuthorizationEndpointService>();
 
 
 

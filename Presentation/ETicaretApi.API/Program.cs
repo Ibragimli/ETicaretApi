@@ -1,5 +1,6 @@
 using ETicaretApi.API.Configurations;
 using ETicaretApi.API.Extensions;
+using ETicaretApi.API.Filters;
 using ETicaretApi.Application;
 using ETicaretApi.Application.Validators.Products;
 using ETicaretApi.Infrastructure;
@@ -37,7 +38,10 @@ builder.Services.AddStorage(ETicaretApi.Infrastructure.Enums.StorageType.Local);
 builder.Services.AddCors(opt => opt.AddDefaultPolicy(policy =>
     policy.WithOrigins("https://localhost:7151").WithOrigins("http://localhost:7151").AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
 
-builder.Services.AddControllers(options => options.Filters.Add<ValidationFilter>())
+builder.Services.AddControllers(options => {
+    options.Filters.Add<ValidationFilter>();
+    options.Filters.Add<RolePermissionFilter>();
+})
     .AddFluentValidation(configuration => configuration.RegisterValidatorsFromAssemblyContaining<CreateProductValidator>());
 //.ConfigureApiBehaviorOptions(opt => opt.SuppressModelStateInvalidFilter = true);
 builder.Services.AddEndpointsApiExplorer();
